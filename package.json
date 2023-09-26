@@ -1,0 +1,51 @@
+{
+  "name": "vue3-application-insights",
+  "version": "1.0.0",
+  "description": "Package to work with application insights.",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsup"
+  },
+  "files": [
+    "dist/**/*",
+    "src/**/*"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dimaros-bv/vue3-application-insights.git"
+  },
+  "keywords": [
+    "vue",
+    "vuejs",
+    "vue3",
+    "application-insights",
+    "app-insights"
+  ],
+  "author": "Eugen Buzyuma <evgeny.buzyuma@dimaros.nl>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dimaros-bv/vue3-application-insights/issues"
+  },
+  "homepage": "https://github.com/dimaros-bv/vue3-application-insights#readme",
+  "dependencies": {
+    "@microsoft/applicationinsights-core-js": "^3.0.2",
+    "@microsoft/applicationinsights-web": "^3.0.2"
+  },
+  "peerDependencies": {
+    "vue": "^3.0.0",
+    "vue-router": "^4.0.0"
+  },
+  "peerDependenciesMeta": {
+    "vue-router": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "tsup": "^7.2.0",
+    "typescript": "^5.2.2",
+    "vue-router": "^4.2.4"
+  }
+}
