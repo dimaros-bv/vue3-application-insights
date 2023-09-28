@@ -1,5 +1,7 @@
 # vue3-application-insights
 
+Vue 3 plugin to simplify integration with Azure Application Insights.
+
 ## Installation
 
 ```console
