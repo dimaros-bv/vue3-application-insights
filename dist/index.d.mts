@@ -10,12 +10,11 @@ interface AppInsightsPluginOptions {
     appName?: string;
     trackInitialPageView?: boolean;
     trackAppErrors?: boolean;
-    onAfterScriptLoaded?: (appInsights: ApplicationInsights) => any;
+    onLoaded?: (appInsights: ApplicationInsights) => any;
 }
-declare const _default: {
+declare const AppInsightPlugin: {
     install: (app: App<Element>, options: AppInsightsPluginOptions) => void;
 };
-
 declare const useAppInsights: () => ApplicationInsights;
 
-export { AppInsightsPluginOptions, _default as default, useAppInsights };
+export { AppInsightPlugin, AppInsightsPluginOptions, useAppInsights };
