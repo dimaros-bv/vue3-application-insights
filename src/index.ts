@@ -17,7 +17,7 @@ export interface AppInsightsPluginOptions {
 
 const injectKey = "appInsights";
 
-export default {
+export const AppInsightPlugin = {
   install: (app: App<Element>, options: AppInsightsPluginOptions) => {
     // Create instance
     let appInsights: ApplicationInsights | null = null;
@@ -103,9 +103,9 @@ function setupPageTracking(options: AppInsightsPluginOptions, appInsights: Appli
   });
 }
 
-const useAppInsights = () => {
+export const useAppInsights = () => {
   const appInsights = inject(injectKey) as ApplicationInsights;
   return appInsights;
 };
 
-export { useAppInsights };
+export default AppInsightPlugin;

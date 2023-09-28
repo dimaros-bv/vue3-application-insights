@@ -11,7 +11,7 @@ npm install vue3-application-insights
 ```js
 import { createApp } from "vue";
 import router from "./router";
-import appInsights, { AppInsightsPluginOptions } from "vue3-application-insights";
+import { AppInsightsPlugin, AppInsightsPluginOptions } from "vue3-application-insights";
 
 const aiOptions: AppInsightsPluginOptions = {
   appName: "<app name for events>", // Prefix for route events
@@ -20,7 +20,7 @@ const aiOptions: AppInsightsPluginOptions = {
   trackAppErrors: true,
 };
 
-createApp(App).use(router).use(appInsights, aiOptions).mount("#app");
+createApp(App).use(router).use(AppInsightsPlugin, aiOptions).mount("#app");
 ```
 
 Track custom event:
