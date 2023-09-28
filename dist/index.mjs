@@ -3,7 +3,7 @@ import { ApplicationInsights } from "@microsoft/applicationinsights-web";
 import { generateW3CId } from "@microsoft/applicationinsights-core-js";
 import { inject } from "vue";
 var injectKey = "appInsights";
-var src_default = {
+var AppInsightPlugin = {
   install: (app, options) => {
     let appInsights = null;
     if (options.appInsightsInstance) {
@@ -41,8 +41,8 @@ var src_default = {
         appInsights == null ? void 0 : appInsights.trackException({ exception: err }, { info });
       };
     }
-    if (options.onAfterScriptLoaded) {
-      options.onAfterScriptLoaded(appInsights);
+    if (options.onLoaded) {
+      options.onLoaded(appInsights);
     }
   }
 };
@@ -68,7 +68,7 @@ var useAppInsights = () => {
   return appInsights;
 };
 export {
-  src_default as default,
+  AppInsightPlugin,
   useAppInsights
 };
 //# sourceMappingURL=index.mjs.map

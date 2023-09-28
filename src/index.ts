@@ -12,12 +12,12 @@ export interface AppInsightsPluginOptions {
   appName?: string;
   trackInitialPageView?: boolean;
   trackAppErrors?: boolean;
-  onAfterScriptLoaded?: (appInsights: ApplicationInsights) => any;
+  onLoaded?: (appInsights: ApplicationInsights) => any;
 }
 
 const injectKey = "appInsights";
 
-export default {
+export const AppInsightPlugin = {
   install: (app: App<Element>, options: AppInsightsPluginOptions) => {
     // Create instance
     let appInsights: ApplicationInsights | null = null;
@@ -76,8 +76,8 @@ export default {
       };
     }
 
-    if (options.onAfterScriptLoaded) {
-      options.onAfterScriptLoaded(appInsights);
+    if (options.onLoaded) {
+      options.onLoaded(appInsights);
     }
   },
 };
@@ -103,9 +103,9 @@ function setupPageTracking(options: AppInsightsPluginOptions, appInsights: Appli
   });
 }
 
-const useAppInsights = () => {
+export const useAppInsights = () => {
   const appInsights = inject(injectKey) as ApplicationInsights;
   return appInsights;
 };
 
-export { useAppInsights };
+export default AppInsightPlugin;

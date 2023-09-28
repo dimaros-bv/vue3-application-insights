@@ -3,7 +3,7 @@
 ## Installation
 
 ```console
-$ npm install vue3-application-insights
+npm install vue3-application-insights
 ```
 
 ## Get started
@@ -11,7 +11,7 @@ $ npm install vue3-application-insights
 ```js
 import { createApp } from "vue";
 import router from "./router";
-import appInsights, { AppInsightsPluginOptions } from "vue3-application-insights";
+import { AppInsightsPlugin, AppInsightsPluginOptions } from "vue3-application-insights";
 
 const aiOptions: AppInsightsPluginOptions = {
   appName: "<app name for events>", // Prefix for route events
@@ -20,7 +20,7 @@ const aiOptions: AppInsightsPluginOptions = {
   trackAppErrors: true,
 };
 
-createApp(App).use(router).use(appInsights, aiOptions).mount("#app");
+createApp(App).use(router).use(AppInsightsPlugin, aiOptions).mount("#app");
 ```
 
 Track custom event:
@@ -46,7 +46,7 @@ appInsights.trackEvent({
 | appName              | string                                    | No                       | App name for router events. If not provided will not present in the event name.                                                   |
 | trackInitialPageView | boolean                                   | No / False               | Track initial page view or track it only when router is ready.                                                                    |
 | trackAppErrors       | boolean                                   | No / False               | Track global errors of the app.                                                                                                   |
-| onAfterScriptLoaded  | (appInsights: ApplicationInsights) => any | No                       | Custom modifications / action to execute after application insights instance is created.                                          |
+| onLoaded             | (appInsights: ApplicationInsights) => any | No                       | Custom modifications / action to execute after application insights instance is created.                                          |
 
 *At least one value should be provide to initialize application insights.
 
