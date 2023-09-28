@@ -17,7 +17,7 @@ export interface AppInsightsPluginOptions {
 
 const injectKey = "appInsights";
 
-export const AppInsightPlugin = {
+export const AppInsightsPlugin = {
   install: (app: App<Element>, options: AppInsightsPluginOptions) => {
     // Create instance
     let appInsights: ApplicationInsights | null = null;
@@ -108,4 +108,4 @@ export const useAppInsights = () => {
   return appInsights;
 };
 
-export default AppInsightPlugin;
+export default AppInsightsPlugin;

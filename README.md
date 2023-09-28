@@ -1,5 +1,7 @@
 # vue3-application-insights
 
+Vue 3 plugin to simplify integration with Azure Application Insights.
+
 ## Installation
 
 ```console
@@ -39,16 +41,17 @@ appInsights.trackEvent({
 
 | Name                 | Type                                      | Required / Default value | Description                                                                                                                       |
 |----------------------|-------------------------------------------|--------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
-| appInsightsInstance  | ApplicationInsights                       | No*                      | Custom self made application insights instance to use.                                                                            |
-| appInsightsConfig    | Snippet                                   | No*                      | Provide custom [application insights configuration](https://github.com/microsoft/ApplicationInsights-JS#configuration).           |
-| connectionString     | string                                    | No*                      | Simply provide application insights connection string only.                                                                       |
+| appInsightsInstance  | ApplicationInsights                       | No*                      | Custom self made Application Insights instance to use.                                                                            |
+| appInsightsConfig    | Snippet                                   | No*                      | Provide custom [Application Insights configuration](https://github.com/microsoft/ApplicationInsights-JS#configuration).           |
+| connectionString     | string                                    | No*                      | Simply provide Application Insights connection string only.                                                                       |
 | router               | Router                                    | No                       | Instance of Router (from vue-router) to track navigation between pages. The event name will have format: `[appName] <route.name>` |
 | appName              | string                                    | No                       | App name for router events. If not provided will not present in the event name.                                                   |
 | trackInitialPageView | boolean                                   | No / False               | Track initial page view or track it only when router is ready.                                                                    |
 | trackAppErrors       | boolean                                   | No / False               | Track global errors of the app.                                                                                                   |
-| onLoaded             | (appInsights: ApplicationInsights) => any | No                       | Custom modifications / action to execute after application insights instance is created.                                          |
+| onLoaded             | (appInsights: ApplicationInsights) => any | No                       | Custom modifications / action to execute after Application Insights instance is created.                                          |
 
-*At least one value should be provide to initialize application insights.
+*One of these three values should be set to connect with your Application Insights instance. 
+If more than one is set the top one (based on the option list) will be used.
 
 
 Inspired by [vue-application-insights](https://github.com/latelierco/vue-application-insights).
