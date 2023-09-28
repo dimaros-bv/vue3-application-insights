@@ -12,7 +12,7 @@ export interface AppInsightsPluginOptions {
   appName?: string;
   trackInitialPageView?: boolean;
   trackAppErrors?: boolean;
-  onAfterScriptLoaded?: (appInsights: ApplicationInsights) => any;
+  onLoaded?: (appInsights: ApplicationInsights) => any;
 }
 
 const injectKey = "appInsights";
@@ -76,8 +76,8 @@ export default {
       };
     }
 
-    if (options.onAfterScriptLoaded) {
-      options.onAfterScriptLoaded(appInsights);
+    if (options.onLoaded) {
+      options.onLoaded(appInsights);
     }
   },
 };

@@ -46,7 +46,7 @@ appInsights.trackEvent({
 | appName              | string                                    | No                       | App name for router events. If not provided will not present in the event name.                                                   |
 | trackInitialPageView | boolean                                   | No / False               | Track initial page view or track it only when router is ready.                                                                    |
 | trackAppErrors       | boolean                                   | No / False               | Track global errors of the app.                                                                                                   |
-| onAfterScriptLoaded  | (appInsights: ApplicationInsights) => any | No                       | Custom modifications / action to execute after application insights instance is created.                                          |
+| onLoaded             | (appInsights: ApplicationInsights) => any | No                       | Custom modifications / action to execute after application insights instance is created.                                          |
 
 *At least one value should be provide to initialize application insights.
 
