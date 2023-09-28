@@ -12,9 +12,9 @@ interface AppInsightsPluginOptions {
     trackAppErrors?: boolean;
     onLoaded?: (appInsights: ApplicationInsights) => any;
 }
-declare const AppInsightPlugin: {
+declare const AppInsightsPlugin: {
     install: (app: App<Element>, options: AppInsightsPluginOptions) => void;
 };
 declare const useAppInsights: () => ApplicationInsights;
 
-export { AppInsightPlugin, AppInsightsPluginOptions, useAppInsights };
+export { AppInsightsPlugin, AppInsightsPluginOptions, AppInsightsPlugin as default, useAppInsights };
