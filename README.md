@@ -3,7 +3,7 @@
 ## Installation
 
 ```console
-$ npm install vue3-application-insights
+npm install vue3-application-insights
 ```
 
 ## Get started
