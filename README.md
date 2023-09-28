@@ -48,7 +48,8 @@ appInsights.trackEvent({
 | trackAppErrors       | boolean                                   | No / False               | Track global errors of the app.                                                                                                   |
 | onLoaded             | (appInsights: ApplicationInsights) => any | No                       | Custom modifications / action to execute after application insights instance is created.                                          |
 
-*At least one value should be provide to initialize application insights.
+*One of these three values should be set to connect with your Application Insights instance. 
+If more than one is set the top one (based on the option list) will be used.
 
 
 Inspired by [vue-application-insights](https://github.com/latelierco/vue-application-insights).
