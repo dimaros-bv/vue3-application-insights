@@ -1,5 +1,5 @@
 import { ApplicationInsights, Snippet } from "@microsoft/applicationinsights-web";
-import { generateW3CId } from "@microsoft/applicationinsights-core-js";
+import { ITelemetryItem, generateW3CId } from "@microsoft/applicationinsights-core-js";
 
 import { App, inject } from "vue";
 import { Router } from "vue-router";
@@ -12,6 +12,8 @@ export interface AppInsightsPluginOptions {
   appName?: string;
   trackInitialPageView?: boolean;
   trackAppErrors?: boolean;
+  cloudRole?: string;
+  cloudRoleInstance?: string;
   onLoaded?: (appInsights: ApplicationInsights) => any;
 }
 
@@ -74,6 +76,18 @@ export const AppInsightsPlugin = {
         }
         appInsights?.trackException({ exception: err as Error }, { info });
       };
+    }
+
+    if (options.cloudRole || options.cloudRoleInstance) {
+      appInsights.addTelemetryInitializer((envelope: ITelemetryItem) => {
+        envelope.tags ??= [];
+        if (options.cloudRole) {
+          envelope.tags["ai.cloud.role"] = options.cloudRole;
+        }
+        if (options.cloudRoleInstance) {
+          envelope.tags["ai.cloud.roleInstance"] = options.cloudRoleInstance;          
+        }
+      });
     }
 
     if (options.onLoaded) {
