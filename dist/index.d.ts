@@ -10,7 +10,9 @@ interface AppInsightsPluginOptions {
     appName?: string;
     trackInitialPageView?: boolean;
     trackAppErrors?: boolean;
-    onLoaded?: (appInsights: ApplicationInsights) => any;
+    cloudRole?: string;
+    cloudRoleInstance?: string;
+    onLoaded?: (appInsights: ApplicationInsights) => void;
 }
 declare const AppInsightsPlugin: {
     install: (app: App<Element>, options: AppInsightsPluginOptions) => void;
