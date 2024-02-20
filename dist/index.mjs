@@ -49,12 +49,11 @@ var AppInsightsPlugin = {
 function setupPageTracking(options, appInsights) {
   const appName = options.appName ? `[${options.appName}] ` : "";
   const pageName = (route) => `${appName}${route.name}`;
-  options.router.beforeEach((route, _, next) => {
+  options.router.beforeEach((route, _) => {
     const name = pageName(route);
     appInsights.context.telemetryTrace.traceID = generateW3CId();
     appInsights.context.telemetryTrace.name = route.name;
     appInsights.startTrackPage(name);
-    next();
   });
   options.router.afterEach((route) => {
     const name = pageName(route);
