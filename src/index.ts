@@ -1,7 +1,7 @@
 import { ApplicationInsights, Snippet } from "@microsoft/applicationinsights-web";
 import { generateW3CId } from "@microsoft/applicationinsights-core-js";
 
-import { App, inject } from "vue";
+import { App, inject, onUnmounted } from "vue";
 import { Router } from "vue-router";
 
 export interface AppInsightsPluginOptions {
@@ -55,6 +55,9 @@ export const AppInsightsPlugin = {
     // Initial calls
     appInsights.loadAppInsights();
 
+    // Flush telemetry buffer on exit
+    onUnmounted(() => appInsights?.flush());
+
     // Watch route event if router option is defined.
     if (options.router) {
       if (options.trackInitialPageView) {
@@ -98,7 +101,6 @@ function setupPageTracking(options: AppInsightsPluginOptions, appInsights: Appli
     const name = pageName(route);
     const url = location.protocol + "//" + location.host + route.fullPath;
     appInsights.stopTrackPage(name, url);
-    appInsights.flush();
   });
 }
 
