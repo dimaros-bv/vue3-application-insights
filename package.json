@@ -1,6 +1,6 @@
 {
   "name": "vue3-application-insights",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Package to work with application insights.",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

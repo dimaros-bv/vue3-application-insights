@@ -51,6 +51,7 @@ var AppInsightsPlugin = {
     app.config.globalProperties.$appInsights = appInsights;
     app.provide(injectKey, appInsights);
     appInsights.loadAppInsights();
+    (0, import_vue.onUnmounted)(() => appInsights == null ? void 0 : appInsights.flush());
     if (options.router) {
       if (options.trackInitialPageView) {
         setupPageTracking(options, appInsights);
@@ -85,7 +86,6 @@ function setupPageTracking(options, appInsights) {
     const name = pageName(route);
     const url = location.protocol + "//" + location.host + route.fullPath;
     appInsights.stopTrackPage(name, url);
-    appInsights.flush();
   });
 }
 var useAppInsights = () => {
