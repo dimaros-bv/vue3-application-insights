@@ -59,7 +59,6 @@ function setupPageTracking(options, appInsights) {
     const name = pageName(route);
     const url = location.protocol + "//" + location.host + route.fullPath;
     appInsights.stopTrackPage(name, url);
-    appInsights.flush();
   });
 }
 var useAppInsights = () => {
