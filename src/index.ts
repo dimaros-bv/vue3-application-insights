@@ -98,7 +98,6 @@ function setupPageTracking(options: AppInsightsPluginOptions, appInsights: Appli
     const name = pageName(route);
     const url = location.protocol + "//" + location.host + route.fullPath;
     appInsights.stopTrackPage(name, url);
-    appInsights.flush();
   });
 }
 
