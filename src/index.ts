@@ -1,7 +1,7 @@
 import { ApplicationInsights, Snippet } from "@microsoft/applicationinsights-web";
-import { generateW3CId } from "@microsoft/applicationinsights-core-js";
+import { ITelemetryItem, generateW3CId } from "@microsoft/applicationinsights-core-js";
 
-import { App, inject } from "vue";
+import { App, InjectionKey, inject } from "vue";
 import { Router } from "vue-router";
 
 export interface AppInsightsPluginOptions {
@@ -12,77 +12,134 @@ export interface AppInsightsPluginOptions {
   appName?: string;
   trackInitialPageView?: boolean;
   trackAppErrors?: boolean;
-  onLoaded?: (appInsights: ApplicationInsights) => any;
+  cloudRole?: string;
+  cloudRoleInstance?: string;
+  onLoaded?: (appInsights: ApplicationInsights) => void;
 }
 
-const injectKey = "appInsights";
+const injectKey: InjectionKey<ApplicationInsights | null> = Symbol("appInsights");
 
-export const AppInsightsPlugin = {
-  install: (app: App<Element>, options: AppInsightsPluginOptions) => {
-    // Create instance
-    let appInsights: ApplicationInsights | null = null;
+const logPrefix = "[ApplicationInsights Plugin]";
 
-    // Use existing instance if provided
-    if (options.appInsightsInstance) {
-      appInsights = options.appInsightsInstance;
-    } else {
-      // Use provided settings or only connection string
-      const appInsightsConfig: Snippet = options.appInsightsConfig || {
-        config: {
-          connectionString: options.connectionString,
-        },
-      };
+/**
+ * Validates the options provided to init plugin.
+ * @param options Application Insight plugin options.
+ * @returns True if options is valid, otherwise false.
+ */
+function isOptionsValid(options: AppInsightsPluginOptions): boolean {
+  const initOptions = [
+    options.appInsightsInstance,
+    options.appInsightsConfig,
+    options.connectionString,
+  ];
 
-      // Basic validation before init
-      if (
-        !appInsightsConfig.config.connectionString &&
-        !appInsightsConfig.config.instrumentationKey
-      ) {
-        console.warn(
-          "[ApplicationInsights Plugin] Neither connectionString nor instrumentationKey is provided." +
-            " ApplicationInsights won't be created."
-        );
-        return;
+  // Validate init options
+  const providedInitOptions = initOptions.filter((config) => !!config).length;
+  if (providedInitOptions === 0) {
+    console.warn(
+      logPrefix +
+        " One of the options should be provided: appInsightsInstance, appInsightsConfig, connectionString." +
+        " ApplicationInsights won't be created."
+    );
+    return false;
+  }
+
+  // Too many init options, just log misconfiguration warning.
+  if (providedInitOptions > 1) {
+    console.warn(
+      logPrefix +
+        " Too many config values provided to init application insights." +
+        " The order of usage is: appInsightsInstance, appInsightsConfig, connectionString."
+    );
+  }
+
+  // Init via config but no instrumentation key or connection string
+  if (
+    options.appInsightsConfig &&
+    !options.appInsightsConfig.config?.connectionString &&
+    !options.appInsightsConfig.config?.instrumentationKey
+  ) {
+    console.warn(
+      logPrefix +
+        " Neither connectionString nor instrumentationKey is provided in appInsightsConfig.config." +
+        " ApplicationInsights won't be created."
+    );
+
+    return false;
+  }
+
+  return true;
+}
+
+/**
+ * Creates application insights based on provided options.
+ * @param options Application Insights plugin options.
+ * @returns ApplicationInsights instance.
+ */
+function createApplicationInsights(options: AppInsightsPluginOptions): ApplicationInsights {
+  if (options.appInsightsInstance) {
+    return options.appInsightsInstance;
+  }
+
+  const appInsightsConfig: Snippet = options.appInsightsConfig ?? {
+    config: {
+      connectionString: options.connectionString,
+    },
+  };
+
+  return new ApplicationInsights(appInsightsConfig);
+}
+
+/**
+ * Setup page tracking if router option is defined.
+ * @param appInsights ApplicationInsights instance.
+ * @param options Application insights plugin options.
+ */
+function configurePageTrackingWithRouter(
+  appInsights: ApplicationInsights,
+  options: AppInsightsPluginOptions
+): void {
+  if (!options.router) {
+    return;
+  }
+
+  if (options.trackInitialPageView) {
+    setupPageTracking(appInsights, options);
+  } else {
+    options.router.isReady().then(() => setupPageTracking(appInsights, options));
+  }
+}
+
+/**
+ * Setup app errors tracking.
+ * @param app App.
+ * @param appInsights ApplicationInsights instance.
+ * @param options Application insights plugin options.
+ */
+function configureAppErrorsTracking(
+  app: App<Element>,
+  appInsights: ApplicationInsights,
+  options: AppInsightsPluginOptions
+): void {
+  // Track app errors automatically
+  if (options.trackAppErrors) {
+    const initialErrorHandler = app.config.errorHandler;
+
+    app.config.errorHandler = (err, instance, info) => {
+      if (initialErrorHandler) {
+        initialErrorHandler(err, instance, info);
       }
+      appInsights?.trackException({ exception: err as Error }, { info });
+    };
+  }
+}
 
-      appInsights = new ApplicationInsights(appInsightsConfig);
-    }
-
-    // Inject AppInsights for later use
-    app.config.globalProperties.$appInsights = appInsights;
-    app.provide(injectKey, appInsights);
-
-    // Initial calls
-    appInsights.loadAppInsights();
-
-    // Watch route event if router option is defined.
-    if (options.router) {
-      if (options.trackInitialPageView) {
-        setupPageTracking(options, appInsights);
-      } else {
-        options.router.isReady().then(() => setupPageTracking(options, appInsights!));
-      }
-    }
-
-    // Track app errors automatically
-    if (options.trackAppErrors) {
-      const initialErrorHandler = app.config.errorHandler;
-
-      app.config.errorHandler = (err, instance, info) => {
-        if (initialErrorHandler) {
-          initialErrorHandler(err, instance, info);
-        }
-        appInsights?.trackException({ exception: err as Error }, { info });
-      };
-    }
-
-    if (options.onLoaded) {
-      options.onLoaded(appInsights);
-    }
-  },
-};
-
-function setupPageTracking(options: AppInsightsPluginOptions, appInsights: ApplicationInsights) {
+/**
+ * Setup page tracking using router.
+ * @param appInsights ApplicationInsights instance.
+ * @param options Application insights plugin options.
+ */
+function setupPageTracking(appInsights: ApplicationInsights, options: AppInsightsPluginOptions) {
   const appName = options.appName ? `[${options.appName}] ` : "";
 
   const pageName = (route: any) => `${appName}${route.name as string}`;
@@ -100,6 +157,53 @@ function setupPageTracking(options: AppInsightsPluginOptions, appInsights: Appli
     appInsights.stopTrackPage(name, url);
   });
 }
+
+/**
+ * Configure cloud role and instance for Azure application map.
+ * @param appInsights ApplicationInsights instance.
+ * @param options Application insights plugin options.
+ */
+function configureCloudRole(
+  appInsights: ApplicationInsights,
+  options: AppInsightsPluginOptions
+): void {
+  if (options.cloudRole || options.cloudRoleInstance) {
+    appInsights.addTelemetryInitializer((envelope: ITelemetryItem) => {
+      envelope.tags ??= [];
+      if (options.cloudRole) {
+        envelope.tags["ai.cloud.role"] = options.cloudRole;
+      }
+      if (options.cloudRoleInstance) {
+        envelope.tags["ai.cloud.roleInstance"] = options.cloudRoleInstance;
+      }
+    });
+  }
+}
+
+export const AppInsightsPlugin = {
+  install: (app: App<Element>, options: AppInsightsPluginOptions) => {
+    if (!isOptionsValid(options)) {
+      return;
+    }
+
+    const appInsights = createApplicationInsights(options);
+
+    // Inject AppInsights for later use
+    app.config.globalProperties.$appInsights = appInsights;
+    app.provide(injectKey, appInsights);
+
+    // Initial calls
+    appInsights.loadAppInsights();
+
+    configurePageTrackingWithRouter(appInsights, options);
+    configureAppErrorsTracking(app, appInsights, options);
+    configureCloudRole(appInsights, options);
+
+    if (options.onLoaded) {
+      options.onLoaded(appInsights);
+    }
+  },
+};
 
 export const useAppInsights = () => {
   const appInsights = inject(injectKey) as ApplicationInsights;
