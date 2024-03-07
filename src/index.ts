@@ -144,19 +144,17 @@ function setupPageTracking(appInsights: ApplicationInsights, options: AppInsight
 
   const pageName = (route: any) => `${appName}${route.name as string}`;
 
-  options.router!.beforeEach((route, _, next) => {
+  options.router!.beforeEach((route, _) => {
     const name = pageName(route);
     appInsights.context.telemetryTrace.traceID = generateW3CId();
     appInsights.context.telemetryTrace.name = route.name as string;
     appInsights.startTrackPage(name);
-    next();
   });
 
   options.router!.afterEach((route) => {
     const name = pageName(route);
     const url = location.protocol + "//" + location.host + route.fullPath;
     appInsights.stopTrackPage(name, url);
-    appInsights.flush();
   });
 }
 
