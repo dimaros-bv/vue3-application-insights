@@ -19,4 +19,4 @@ declare const AppInsightsPlugin: {
 };
 declare const useAppInsights: () => ApplicationInsights;
 
-export { AppInsightsPlugin, AppInsightsPluginOptions, AppInsightsPlugin as default, useAppInsights };
+export { AppInsightsPlugin, type AppInsightsPluginOptions, AppInsightsPlugin as default, useAppInsights };
