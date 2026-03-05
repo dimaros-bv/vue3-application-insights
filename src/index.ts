@@ -1,8 +1,8 @@
-import { ApplicationInsights, Snippet } from "@microsoft/applicationinsights-web";
-import { ITelemetryItem, generateW3CId } from "@microsoft/applicationinsights-core-js";
+import {ApplicationInsights, Snippet} from "@microsoft/applicationinsights-web";
+import {generateW3CId, ITelemetryItem} from "@microsoft/applicationinsights-core-js";
 
-import { App, InjectionKey, inject } from "vue";
-import { Router } from "vue-router";
+import {App, inject, InjectionKey} from "vue";
+import {Router} from "vue-router";
 
 export interface AppInsightsPluginOptions {
   appInsightsInstance?: ApplicationInsights;
@@ -208,8 +208,7 @@ export const AppInsightsPlugin = {
 };
 
 export const useAppInsights = () => {
-  const appInsights = inject(injectKey) as ApplicationInsights;
-  return appInsights;
+  return inject(injectKey) as ApplicationInsights;
 };
 
 export default AppInsightsPlugin;
