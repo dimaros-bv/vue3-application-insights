@@ -72,7 +72,7 @@ const aiOptions: AppInsightsPluginOptions = {
 
 Add a file to your `plugins` directory:
 ```ts
-import {AppInsightsPlugin, type AppInsightsPluginOptions} from "vue3-application-insights";
+import { AppInsightsPlugin, type AppInsightsPluginOptions } from "vue3-application-insights";
 
 export default defineNuxtPlugin((nuxtApp) => {
   const config = useRuntimeConfig();
