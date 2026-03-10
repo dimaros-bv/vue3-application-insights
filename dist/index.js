@@ -18,17 +18,17 @@ var __copyProps = (to, from, except, desc) => {
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
 // src/index.ts
-var src_exports = {};
-__export(src_exports, {
+var index_exports = {};
+__export(index_exports, {
   AppInsightsPlugin: () => AppInsightsPlugin,
-  default: () => src_default,
+  default: () => index_default,
   useAppInsights: () => useAppInsights
 });
-module.exports = __toCommonJS(src_exports);
+module.exports = __toCommonJS(index_exports);
 var import_applicationinsights_web = require("@microsoft/applicationinsights-web");
 var import_applicationinsights_core_js = require("@microsoft/applicationinsights-core-js");
 var import_vue = require("vue");
-var injectKey = Symbol("appInsights");
+var injectKey = /* @__PURE__ */ Symbol("appInsights");
 var logPrefix = "[ApplicationInsights Plugin]";
 function isOptionsValid(options) {
   var _a, _b;
@@ -137,10 +137,9 @@ var AppInsightsPlugin = {
   }
 };
 var useAppInsights = () => {
-  const appInsights = (0, import_vue.inject)(injectKey);
-  return appInsights;
+  return (0, import_vue.inject)(injectKey);
 };
-var src_default = AppInsightsPlugin;
+var index_default = AppInsightsPlugin;
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   AppInsightsPlugin,

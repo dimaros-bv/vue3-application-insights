@@ -2,7 +2,7 @@
 import { ApplicationInsights } from "@microsoft/applicationinsights-web";
 import { generateW3CId } from "@microsoft/applicationinsights-core-js";
 import { inject } from "vue";
-var injectKey = Symbol("appInsights");
+var injectKey = /* @__PURE__ */ Symbol("appInsights");
 var logPrefix = "[ApplicationInsights Plugin]";
 function isOptionsValid(options) {
   var _a, _b;
@@ -111,13 +111,12 @@ var AppInsightsPlugin = {
   }
 };
 var useAppInsights = () => {
-  const appInsights = inject(injectKey);
-  return appInsights;
+  return inject(injectKey);
 };
-var src_default = AppInsightsPlugin;
+var index_default = AppInsightsPlugin;
 export {
   AppInsightsPlugin,
-  src_default as default,
+  index_default as default,
   useAppInsights
 };
 //# sourceMappingURL=index.mjs.map

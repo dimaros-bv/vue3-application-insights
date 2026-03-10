@@ -13,9 +13,9 @@ npm install vue3-application-insights
 ## Setup
 
 ### Minimal
-```js
+```ts
 import { createApp } from "vue";
-import { AppInsightsPlugin, AppInsightsPluginOptions } from "vue3-application-insights";
+import { AppInsightsPlugin, type AppInsightsPluginOptions } from "vue3-application-insights";
 
 const aiOptions: AppInsightsPluginOptions = {
   connectionString: "<your connection string>",
@@ -25,10 +25,10 @@ createApp(App).use(AppInsightsPlugin, aiOptions).mount("#app");
 ```
 
 ### With router and app errors
-```js
+```ts
 import { createApp } from "vue";
 import router from "./router";
-import { AppInsightsPlugin, AppInsightsPluginOptions } from "vue3-application-insights";
+import { AppInsightsPlugin, type AppInsightsPluginOptions } from "vue3-application-insights";
 
 const aiOptions: AppInsightsPluginOptions = {
   connectionString: "<your connection string>",
@@ -40,7 +40,7 @@ createApp(App).use(router).use(AppInsightsPlugin, aiOptions).mount("#app");
 ```
 
 ### Custom Application Insights configuration
-```js
+```ts
 const aiOptions: AppInsightsPluginOptions = {
   appInsightsConfig: {
     // See Application Insights specifications: https://github.com/microsoft/ApplicationInsights-JS#configuration
@@ -54,7 +54,7 @@ const aiOptions: AppInsightsPluginOptions = {
 ```
 
 ### All options example
-```js
+```ts
 const aiOptions: AppInsightsPluginOptions = {
   connectionString: import.meta.env.VITE_APPLICATION_INSIGHTS_CONNECTION_STRING, // Get value from .env file
   router: router,
@@ -66,6 +66,25 @@ const aiOptions: AppInsightsPluginOptions = {
     // Custom changes for application insights
   }
 };
+```
+
+### Setup with Nuxt
+
+Add a client side Nuxt plugin. To do this, add a file to your `plugins` directory, its file name ending in `.client.ts`:
+```ts
+import { AppInsightsPlugin, type AppInsightsPluginOptions } from "vue3-application-insights";
+
+export default defineNuxtPlugin((nuxtApp) => {
+  const config = useRuntimeConfig();
+  const router = useRouter();
+
+  const options: AppInsightsPluginOptions = {
+    connectionString: "<your connection string>",
+    router: router,
+    trackAppErrors: true,
+  };
+  nuxtApp.vueApp.use(AppInsightsPlugin, options);
+});
 ```
 
 
