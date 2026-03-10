@@ -146,16 +146,14 @@ function setupPageTracking(appInsights: ApplicationInsights, options: AppInsight
 
   options.router!.beforeEach((route, _) => {
     const name = pageName(route);
-    if (appInsights.context.telemetryTrace) {
-      appInsights.context.telemetryTrace.traceID = generateW3CId();
-      appInsights.context.telemetryTrace.name = route.name as string;
-    }
+    appInsights.context.telemetryTrace.traceID = generateW3CId();
+    appInsights.context.telemetryTrace.name = route.name as string;
     appInsights.startTrackPage(name);
   });
 
   options.router!.afterEach((route) => {
     const name = pageName(route);
-    const url = location ? location.protocol + "//" + location.host + route.fullPath : undefined;
+    const url = location.protocol + "//" + location.host + route.fullPath;
     appInsights.stopTrackPage(name, url);
   });
 }

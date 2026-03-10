@@ -69,15 +69,13 @@ function setupPageTracking(appInsights, options) {
   const pageName = (route) => `${appName}${route.name}`;
   options.router.beforeEach((route, _) => {
     const name = pageName(route);
-    if (appInsights.context.telemetryTrace) {
-      appInsights.context.telemetryTrace.traceID = generateW3CId();
-      appInsights.context.telemetryTrace.name = route.name;
-    }
+    appInsights.context.telemetryTrace.traceID = generateW3CId();
+    appInsights.context.telemetryTrace.name = route.name;
     appInsights.startTrackPage(name);
   });
   options.router.afterEach((route) => {
     const name = pageName(route);
-    const url = location ? location.protocol + "//" + location.host + route.fullPath : void 0;
+    const url = location.protocol + "//" + location.host + route.fullPath;
     appInsights.stopTrackPage(name, url);
   });
 }
@@ -113,8 +111,7 @@ var AppInsightsPlugin = {
   }
 };
 var useAppInsights = () => {
-  const appInsights = inject(injectKey);
-  return appInsights;
+  return inject(injectKey);
 };
 var index_default = AppInsightsPlugin;
 export {

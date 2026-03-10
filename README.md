@@ -70,7 +70,7 @@ const aiOptions: AppInsightsPluginOptions = {
 
 ### Setup with Nuxt
 
-Add a file to your `plugins` directory:
+Add a client side Nuxt plugin. To do this, add a file to your `plugins` directory, its file name ending in `.client.ts`:
 ```ts
 import { AppInsightsPlugin, type AppInsightsPluginOptions } from "vue3-application-insights";
 
