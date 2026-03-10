@@ -5,6 +5,10 @@ on:
     branches: 
     - main
 
+permissions:
+  id-token: write  # Required for OIDC
+  contents: read
+
 jobs:
   build-publish:
     runs-on: ubuntu-latest
@@ -20,5 +24,3 @@ jobs:
         run: npm run build
       - name: Publish
         run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_ACCESS_TOKEN}}
